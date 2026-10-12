@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/assets/" />
+  <Folder Name="/docs/" />
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/ProductName.App.Wpf/ProductName.App.Wpf.csproj" />
+    <Project Path="src/ProductName.AppCore/ProductName.AppCore.csproj" />
+    <Project Path="src/ProductName.Domain/ProductName.Domain.csproj" />
+    <Project Path="src/ProductName.Infrastructure/ProductName.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ProductName.AppCore.Tests/ProductName.AppCore.Tests.csproj" />
+    <Project Path="tests/ProductName.Domain.Tests/ProductName.Domain.Tests.csproj" />
+    <Project Path="tests/ProductName.Infrastructure.Tests/ProductName.Infrastructure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tools/" />
+</Solution>
