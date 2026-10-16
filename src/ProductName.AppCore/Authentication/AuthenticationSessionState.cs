@@ -5,6 +5,7 @@ namespace ProductName.AppCore.Authentication;
 public sealed class AuthenticationSessionState : IAuthenticationSessionState
 {
     public AuthenticationSession? CurrentSession { get; private set; }
+
     public event EventHandler? SessionInvalidated;
 
     public void Set(AuthenticationSession session) => CurrentSession = session;

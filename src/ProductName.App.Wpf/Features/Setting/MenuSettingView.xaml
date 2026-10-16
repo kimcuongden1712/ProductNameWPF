@@ -1,0 +1,12 @@
+<Window x:Class="ProductName.App.Wpf.Features.MenuSettingView" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Menu setting" Height="420" Width="640" WindowStartupLocation="CenterScreen">
+    <Grid Margin="24">
+        <StackPanel>
+            <TextBlock Text="Menu setting" FontSize="28" FontWeight="Bold" Margin="0,0,0,20" />
+            <TextBlock Text="{Binding AccountName}" FontSize="16" />
+            <Button Content="Dispatcher" Command="{Binding OpenMainCommand}" Margin="0,20,0,8" Padding="12" />
+            <Button Content="Logout" Command="{Binding SignOutCommand}" Padding="12" />
+        </StackPanel>
+    </Grid>
+</Window>

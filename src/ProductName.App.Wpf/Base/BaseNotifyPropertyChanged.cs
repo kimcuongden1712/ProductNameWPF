@@ -9,7 +9,6 @@ namespace ProductName.App.Wpf.Base
     /// </summary>
     public abstract class BaseNotifyPropertyChanged : INotifyPropertyChanged, IDisposable
     {
-
         /// <summary>
         /// Occurs when a property value changes
         /// </summary>
@@ -242,6 +241,5 @@ namespace ProductName.App.Wpf.Base
                 _owner.PropertyChanged = _originalHandler;
             }
         }
-
     }
 }

@@ -21,13 +21,19 @@ public sealed class AuthenticatedSessionHandler(IAuthenticationWorkflow authenti
                 "Sign in is required before calling this endpoint.");
         }
 
+        if (session.ExpiresAtUtc is { } expiresAtUtc && expiresAtUtc <= DateTimeOffset.UtcNow)
+        {
+            await authenticationWorkflow.InvalidateSessionAsync(cancellationToken);
+            throw new AuthenticationException(AuthenticationFailure.InvalidToken, "Your session expired. Please sign in again.");
+        }
+
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", session.AccessToken);
         var response = await base.SendAsync(request, cancellationToken);
 
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             response.Dispose();
-            //await authenticationWorkflow.InvalidateSessionAsync(cancellationToken);
+            await authenticationWorkflow.InvalidateSessionAsync(cancellationToken);
             throw new AuthenticationException(
                 AuthenticationFailure.InvalidToken,
                 "Your session expired. Please sign in again.");

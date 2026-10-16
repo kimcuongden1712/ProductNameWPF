@@ -8,32 +8,40 @@ public sealed class AuthenticationWorkflow(
     ITokenStore tokenStore) : IAuthenticationWorkflow
 {
     #region fields
+
     private string? _pendingProfileToken;
-    #endregion
+
+    #endregion fields
 
     #region properties events
+
     public AuthenticationSession? CurrentSession { get; private set; }
+
     public event EventHandler? SessionInvalidated;
+
     public bool HasPendingProfileLoad => !string.IsNullOrWhiteSpace(_pendingProfileToken);
-    #endregion
+
+    #endregion properties events
 
     #region Signin
+
     public async Task<AuthenticationSession> SignInAsync(string customerCode, string password, CancellationToken cancellationToken)
     {
         CurrentSession = null;
         _pendingProfileToken = null;
 
-        var accessToken = await authenticationApi.SignInAsync(customerCode.Trim(), password, cancellationToken);
+        var result = await authenticationApi.SignInAsync(customerCode.Trim(), password, cancellationToken);
+        var accessToken = result.AccessToken;
 
         if (string.IsNullOrWhiteSpace(accessToken))
         {
             throw new AuthenticationException(AuthenticationFailure.InvalidResponse, "The sign-in response did not contain a valid access token.");
         }
 
-        return await LoadAndCommitProfileAsync(accessToken, cancellationToken);
+        return await LoadAndCommitProfileAsync(accessToken, result.ExpiresAtUtc, cancellationToken);
     }
 
-    private async Task<AuthenticationSession> LoadAndCommitProfileAsync(string accessToken, CancellationToken cancellationToken)
+    private async Task<AuthenticationSession> LoadAndCommitProfileAsync(string accessToken, DateTimeOffset? expiresAtUtc, CancellationToken cancellationToken)
     {
         AccountProfile account;
         try
@@ -65,13 +73,13 @@ public sealed class AuthenticationWorkflow(
                 ex);
         }
 
-        var session = new AuthenticationSession(accessToken, account);
+        var session = new AuthenticationSession(accessToken, account, expiresAtUtc);
         CurrentSession = session;
         _pendingProfileToken = null;
         return session;
     }
-    #endregion
 
+    #endregion Signin
 
     public async Task<RestoreSessionStatus> TryRestoreSessionAsync(CancellationToken cancellationToken)
     {
@@ -95,6 +103,11 @@ public sealed class AuthenticationWorkflow(
             await tokenStore.ClearAsync(cancellationToken);
             return RestoreSessionStatus.InvalidToken;
         }
+        catch (AuthenticationException ex) when (ex.Failure is AuthenticationFailure.NetworkUnavailable or AuthenticationFailure.ServiceUnavailable)
+        {
+            _pendingProfileToken = accessToken;
+            return RestoreSessionStatus.Unavailable;
+        }
     }
 
     public async Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken)
@@ -105,7 +118,7 @@ public sealed class AuthenticationWorkflow(
             throw new InvalidOperationException("There is no pending profile request to retry.");
         }
 
-        return await LoadAndCommitProfileAsync(accessToken, cancellationToken);
+        return await LoadAndCommitProfileAsync(accessToken, null, cancellationToken);
     }
 
     public async Task SignOutAsync(CancellationToken cancellationToken)
@@ -118,7 +131,8 @@ public sealed class AuthenticationWorkflow(
 
         if (!string.IsNullOrWhiteSpace(accessToken))
         {
-            await authenticationApi.SignOutAsync(accessToken, cancellationToken);
+            try { await authenticationApi.SignOutAsync(accessToken, cancellationToken); }
+            catch { /* Local sign-out succeeds even when the service is unavailable. */ }
         }
     }
 

@@ -4,7 +4,7 @@ namespace ProductName.AppCore.Authentication.Interface;
 
 public interface IAuthenticationApi
 {
-    Task<string> SignInAsync(string customerCode, string password, CancellationToken cancellationToken);
+    Task<SignInResult> SignInAsync(string customerCode, string password, CancellationToken cancellationToken);
 
     Task<AccountProfile> GetCurrentAccountAsync(string accessToken, CancellationToken cancellationToken);
 

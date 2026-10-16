@@ -14,7 +14,7 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
 {
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
-    public async Task<string> SignInAsync(string customerCode, string password, CancellationToken cancellationToken)
+    public async Task<SignInResult> SignInAsync(string customerCode, string password, CancellationToken cancellationToken)
     {
         using var request = new HttpRequestMessage
         {
@@ -66,7 +66,7 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
                 AuthenticationFailure.InvalidResponse,
                 "The sign-in response did not include a valid access token.");
         }
-        return result.AccessToken;
+        return new SignInResult(result.AccessToken, result.ExpiresAtUtc);
     }
 
     public async Task<AccountProfile> GetCurrentAccountAsync(string accessToken, CancellationToken cancellationToken)
@@ -76,9 +76,14 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
             RequestUri = new Uri(options.BaseUrl + options.CurrentAccountPath),
         };
         ApiResultModel response = await httpClient.GetDataListAsync(request, accessToken, cancellationToken);
-        if (!response.IsError)
+        if (response.IsError)
         {
-
+            var failure = response.StatusCode == HttpStatusCode.Unauthorized
+                ? AuthenticationFailure.InvalidToken
+                : response.Error?.Kind is ApiErrorKind.Network or ApiErrorKind.Timeout
+                    ? AuthenticationFailure.NetworkUnavailable
+                    : AuthenticationFailure.ServiceUnavailable;
+            throw new AuthenticationException(failure, response.Error?.Message ?? "Could not load the account profile.");
         }
 
         AccountProfile? result;
@@ -91,7 +96,7 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
             throw new AuthenticationException(AuthenticationFailure.InvalidResponse, "The sign-in response had an unexpected format.", ex);
         }
 
-        return result;
+        return result ?? throw new AuthenticationException(AuthenticationFailure.InvalidResponse, "The account response was empty or invalid.");
     }
 
     public async Task SignOutAsync(string accessToken, CancellationToken cancellationToken)
@@ -122,11 +127,12 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
         [JsonPropertyName("accessToken")]
         public string AccessToken { get; init; } = string.Empty;
 
+        [JsonPropertyName("expiresAtUtc")]
+        public DateTimeOffset? ExpiresAtUtc { get; init; }
+
         [JsonPropertyName("tokenType")]
         public string? tokenType { get; init; }
 
-        [JsonPropertyName("expiresAtUtc")]
-        public DateTimeOffset? ExpiresAtUtc { get; init; } = null;
     }
     #endregion
     private sealed class CurrentAccountResponse

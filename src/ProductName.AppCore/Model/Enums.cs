@@ -4,7 +4,8 @@
     {
         NoToken,
         Restored,
-        InvalidToken
+        InvalidToken,
+        Unavailable
     }
 
     public enum AuthenticationFailure

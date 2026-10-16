@@ -4,7 +4,10 @@ namespace ProductName.AppCore.Authentication.Interface;
 public interface IAuthenticationSessionState
 {
     AuthenticationSession? CurrentSession { get; }
+
     event EventHandler? SessionInvalidated;
+
     void Set(AuthenticationSession session);
+
     void Clear(bool invalidated = false);
 }

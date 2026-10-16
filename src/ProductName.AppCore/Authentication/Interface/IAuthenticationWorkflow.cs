@@ -1,3 +1,5 @@
+using ProductName.AppCore.Model;
+
 namespace ProductName.AppCore.Authentication.Interface;
 
 public interface IAuthenticationWorkflow
@@ -13,11 +15,11 @@ public interface IAuthenticationWorkflow
         string password,
         CancellationToken cancellationToken);
 
-    //Task<RestoreSessionStatus> TryRestoreSessionAsync(CancellationToken cancellationToken);
+    Task<RestoreSessionStatus> TryRestoreSessionAsync(CancellationToken cancellationToken);
 
-    //Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken);
+    Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken);
 
-    //Task SignOutAsync(CancellationToken cancellationToken);
+    Task SignOutAsync(CancellationToken cancellationToken);
 
-    //Task InvalidateSessionAsync(CancellationToken cancellationToken);
+    Task InvalidateSessionAsync(CancellationToken cancellationToken);
 }
