@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <SolidColorBrush x:Key="Brush.Brand" Color="{StaticResource Color.Brand}" />
+    <SolidColorBrush x:Key="Brush.BrandHover" Color="{StaticResource Color.BrandHover}" />
+    <SolidColorBrush x:Key="Brush.BrandPressed" Color="{StaticResource Color.BrandPressed}" />
+    <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}" />
+    <SolidColorBrush x:Key="Brush.PopupSurface" Color="{StaticResource Color.PopupSurface}" />
+    <SolidColorBrush x:Key="Brush.Card" Color="{StaticResource Color.Card}" />
+    <SolidColorBrush x:Key="Brush.TextPrimary" Color="{StaticResource Color.TextPrimary}" />
+    <SolidColorBrush x:Key="Brush.TextSecondary" Color="{StaticResource Color.TextSecondary}" />
+    <SolidColorBrush x:Key="Brush.Border" Color="{StaticResource Color.Border}" />
+    <SolidColorBrush x:Key="Brush.Disabled" Color="{StaticResource Color.Disabled}" />
+    <SolidColorBrush x:Key="Brush.ListBase" Color="{StaticResource Color.ListBase}" />
+    <SolidColorBrush x:Key="Brush.ListHeader" Color="{StaticResource Color.ListHeader}" />
+    <SolidColorBrush x:Key="Brush.ListData" Color="{StaticResource Color.ListData}" />
+    <SolidColorBrush x:Key="Brush.ListActive" Color="{StaticResource Color.ListActive}" />
+    <SolidColorBrush x:Key="Brush.ListHover" Color="{StaticResource Color.ListHover}" />
+    <SolidColorBrush x:Key="Brush.ListSelected" Color="{StaticResource Color.ListSelected}" />
+    <SolidColorBrush x:Key="Brush.ListNotDispatched" Color="{StaticResource Color.ListNotDispatched}" />
+    <SolidColorBrush x:Key="Brush.ListReserved" Color="{StaticResource Color.ListReserved}" />
+    <SolidColorBrush x:Key="Brush.ListFromApp" Color="{StaticResource Color.ListFromApp}" />
+    <SolidColorBrush x:Key="Brush.ListUrgent" Color="{StaticResource Color.ListUrgent}" />
+    <SolidColorBrush x:Key="Brush.ListNext" Color="{StaticResource Color.ListNext}" />
+    <SolidColorBrush x:Key="Brush.ListWaitTimeMissing" Color="{StaticResource Color.ListWaitTimeMissing}" />
+    <SolidColorBrush x:Key="Brush.ListEditing" Color="{StaticResource Color.ListEditing}" />
+    <SolidColorBrush x:Key="Brush.ListAreaYellow" Color="{StaticResource Color.ListAreaYellow}" />
+    <SolidColorBrush x:Key="Brush.ListAreaWhite" Color="{StaticResource Color.ListAreaWhite}" />
+    <SolidColorBrush x:Key="Brush.ListItemPrimaryText" Color="{StaticResource Color.ListItemPrimaryText}" />
+    <SolidColorBrush x:Key="Brush.ListItemSecondaryText" Color="{StaticResource Color.ListItemSecondaryText}" />
+    <SolidColorBrush x:Key="Brush.ListItemEmphasisText" Color="{StaticResource Color.ListItemEmphasisText}" />
+    <SolidColorBrush x:Key="Brush.ListBorder" Color="{StaticResource Color.ListBorder}" />
+    <SolidColorBrush x:Key="Brush.ListBorderHighlight" Color="{StaticResource Color.ListBorderHighlight}" />
+    <SolidColorBrush x:Key="Brush.YellowBorder" Color="{StaticResource Color.YellowBorder}" />
+    <SolidColorBrush x:Key="Brush.LabelHighlight" Color="{StaticResource Color.LabelHighlight}" />
+    <SolidColorBrush x:Key="Brush.FunctionKey" Color="{StaticResource Color.FunctionKey}" />
+</ResourceDictionary>

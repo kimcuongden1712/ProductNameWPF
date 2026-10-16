@@ -11,6 +11,7 @@
     <Project Path="src/ProductName.AppCore/ProductName.AppCore.csproj" />
     <Project Path="src/ProductName.Domain/ProductName.Domain.csproj" />
     <Project Path="src/ProductName.Infrastructure/ProductName.Infrastructure.csproj" />
+    <Project Path="src/ProductName.SampleTemplate/ProductName.SampleTemplate.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ProductName.AppCore.Tests/ProductName.AppCore.Tests.csproj" />

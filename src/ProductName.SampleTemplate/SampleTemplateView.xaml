@@ -1,0 +1,341 @@
+<UserControl x:Class="NewTemplateProject.SampleTemplateView"
+             x:Name="Root"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d">
+    <Grid Background="{StaticResource Brush.Surface}">
+        <ScrollViewer Style="{StaticResource ScrollViewer.Custom}"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Margin="{StaticResource Spacing.Page}" MaxWidth="1000">
+                <TextBlock Text="NewTemplateProject"
+                           Style="{StaticResource Text.Heading}" />
+                <TextBlock Text="SampleTemplateView | WPF style catalogue"
+                           Style="{StaticResource Text.Body}"
+                           Margin="0,8,0,24" />
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="01 · Design tokens and semantic brushes"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Color values live in Tokens/Colors.xaml; roles are exposed as brushes by Themes/Light.xaml."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,14" />
+                        <WrapPanel>
+                            <Border Background="{StaticResource Brush.Surface}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Window / surface" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.PopupSurface}" BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Popup surface" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.Brand}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Brand / table header" Foreground="White" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.ListBase}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="List base" Foreground="White" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.ListData}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="List data" Foreground="White" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.ListSelected}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Selected" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.ListUrgent}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Urgent request" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                            <Border Background="{StaticResource Brush.ListNext}" Padding="10" Margin="0,0,8,8">
+                                <TextBlock Text="Next assignment" Style="{StaticResource Text.Caption}" />
+                            </Border>
+                        </WrapPanel>
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="Background=&quot;{StaticResource Brush.Brand}&quot;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="02 · Typography and labels"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Label size variants and semantic highlight/table labels."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <WrapPanel VerticalAlignment="Center">
+                            <Label Content="XSmall 10" Style="{StaticResource Label.XSmall}" />
+                            <Label Content="Small 12" Style="{StaticResource Label.Small}" />
+                            <Label Content="Middle 14" Style="{StaticResource Label.Middle}" />
+                            <Label Content="Large 16" Style="{StaticResource Label.Large}" />
+                            <Label Content="HalfWidth" Style="{StaticResource Label.HalfWidth}" />
+                            <Label Content="Highlighted label" Style="{StaticResource Label.Highlight}" Margin="8,0" />
+                        </WrapPanel>
+                        <Grid Margin="0,12,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Content="Table header" Style="{StaticResource Label.TableHeader}" />
+                            <Border Grid.Column="1" Background="{StaticResource Brush.ListBase}" BorderBrush="White" BorderThickness="1,1,0,0">
+                                <Label Content="List column" Foreground="White" HorizontalContentAlignment="Center" />
+                            </Border>
+                            <Border Grid.Column="2" Background="{StaticResource Brush.ListData}" BorderBrush="White" BorderThickness="1,1,0,0">
+                                <Label Content="Data column" Foreground="White" HorizontalContentAlignment="Center" />
+                            </Border>
+                        </Grid>
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Label Content=&quot;Title&quot; Style=&quot;{StaticResource Label.Large}&quot; /&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="03 · Buttons and function keys"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Variants inherit Button.Base. Hover and pressed states are interactive."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <WrapPanel>
+                            <Button Content="Primary" Style="{StaticResource Button.Primary}" Margin="0,0,8,8" />
+                            <Button Content="Secondary" Style="{StaticResource Button.Secondary}" Margin="0,0,8,8" />
+                            <Button Content="XSmall" Style="{StaticResource Button.XSmall}" Margin="0,0,8,8" />
+                            <Button Content="Small" Style="{StaticResource Button.Small}" Margin="0,0,8,8" />
+                            <Button Content="Middle" Style="{StaticResource Button.Middle}" Margin="0,0,8,8" />
+                            <Button Content="Large" Style="{StaticResource Button.Large}" Margin="0,0,8,8" />
+                            <Button Content="Disabled" Style="{StaticResource Button.Primary}" IsEnabled="False" Margin="0,0,8,8" />
+                        </WrapPanel>
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Button Content=&quot;Save&quot; Style=&quot;{StaticResource Button.Primary}&quot; /&gt;" />
+                        <TextBlock Text="Function key sample" Style="{StaticResource Text.Label}" Margin="0,14,0,8" />
+                        <UniformGrid Columns="4">
+                            <Button Content="F1  Help" Style="{StaticResource FunctionKey.Button}" Margin="0,0,6,0" />
+                            <Button Content="F2  Search" Style="{StaticResource FunctionKey.Button}" Margin="0,0,6,0" />
+                            <Button Content="F3  Update" Style="{StaticResource FunctionKey.Button}" Margin="0,0,6,0" />
+                            <Button Content="F4  Close" Style="{StaticResource FunctionKey.Button}" />
+                        </UniformGrid>
+                        <Label Content="Function key label" Style="{StaticResource FunctionKey.Label}" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Button Content=&quot;F1 Help&quot; Style=&quot;{StaticResource FunctionKey.Button}&quot; /&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="04 · Inputs"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="TextBox sizes, checkbox, radio, toggle, ComboBox and native WPF DatePicker."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="24" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Content="TextBox XSmall" Style="{StaticResource Label.Small}" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Text="10 pt" Style="{StaticResource Input.TextBox.XSmall}" Margin="0,4" />
+                            <Label Grid.Row="0" Grid.Column="3" Content="TextBox Small" Style="{StaticResource Label.Small}" />
+                            <TextBox Grid.Row="0" Grid.Column="4" Text="12 pt" Style="{StaticResource Input.TextBox.Small}" Margin="0,4" />
+                            <Label Grid.Row="1" Grid.Column="0" Content="TextBox Middle" Style="{StaticResource Label.Small}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="14 pt" Style="{StaticResource Input.TextBox.Middle}" Margin="0,4" />
+                            <Label Grid.Row="1" Grid.Column="3" Content="TextBox Large" Style="{StaticResource Label.Small}" />
+                            <TextBox Grid.Row="1" Grid.Column="4" Text="16 pt" Style="{StaticResource Input.TextBox.Large}" Margin="0,4" />
+                            <Label Grid.Row="2" Grid.Column="0" Content="TextBox HalfWidth" Style="{StaticResource Label.Small}" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Text="12345" Style="{StaticResource Input.TextBox.HalfWidth}" Margin="0,4" />
+                            <Label Grid.Row="2" Grid.Column="3" Content="ComboBox" Style="{StaticResource Label.Small}" />
+                            <ComboBox Grid.Row="2" Grid.Column="4" Style="{StaticResource Input.ComboBox}" SelectedIndex="0" Margin="0,4">
+                                <ComboBoxItem Content="Dispatch" />
+                                <ComboBoxItem Content="Reservation" />
+                                <ComboBoxItem Content="Completed" />
+                            </ComboBox>
+                            <Label Grid.Row="3" Grid.Column="0" Content="DatePicker" Style="{StaticResource Label.Small}" />
+                            <DatePicker Grid.Row="3" Grid.Column="1" Style="{StaticResource Input.DatePicker.HalfWidth}" SelectedDate="2026-10-16" Margin="0,4" />
+                            <Label Grid.Row="3" Grid.Column="3" Content="CheckBox" Style="{StaticResource Label.Small}" />
+                            <StackPanel Grid.Row="3" Grid.Column="4" Orientation="Horizontal">
+                                <CheckBox Content="Enabled" IsChecked="True" Style="{StaticResource Input.CheckBox.Default}" Margin="0,4,16,4" />
+                                <CheckBox Content="Disabled" IsEnabled="False" Style="{StaticResource Input.CheckBox.Default}" Margin="0,4" />
+                            </StackPanel>
+                            <Label Grid.Row="4" Grid.Column="0" Content="Radio / Toggle" Style="{StaticResource Label.Small}" />
+                            <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Orientation="Horizontal">
+                                <RadioButton Content="A" GroupName="Sample" IsChecked="True" Style="{StaticResource Input.RadioButton}" Margin="0,4,12,4" />
+                                <RadioButton Content="B" GroupName="Sample" Style="{StaticResource Input.RadioButton.Small}" Margin="0,4,12,4" />
+                                <RadioButton Content="Common window" GroupName="Sample" Style="{StaticResource Input.RadioButton.CommonWindow}" Margin="0,4,12,4" />
+                                <ToggleButton Content="On / Off" IsChecked="True" Style="{StaticResource Input.ToggleButton}" Margin="0,4" />
+                                <ToggleButton Content="Small" Style="{StaticResource Input.ToggleButton.Small}" Margin="8,4" />
+                            </StackPanel>
+                        </Grid>
+                        <TextBlock Style="{StaticResource Demo.Code}" Margin="0,10,0,0"
+                                   Text="&lt;TextBox Text=&quot;Value&quot; Style=&quot;{StaticResource Input.TextBox.Middle}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;ComboBox Style=&quot;{StaticResource Input.ComboBox}&quot; /&gt;  |  &lt;CheckBox Style=&quot;{StaticResource Input.CheckBox.Default}&quot; /&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="05 · ListBox and business status items"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Select an item to see the common ListBoxItem selection style. Status colors are explicit semantic item styles."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <ListBox Style="{StaticResource ListBox.Base}"
+                                 ItemContainerStyle="{StaticResource ListBoxItem.Base}"
+                                 Height="132">
+                            <ListBoxItem Content="Normal list item" />
+                            <ListBoxItem Content="Selected list item" IsSelected="True" />
+                            <ListBoxItem Content="Disabled list item" IsEnabled="False" />
+                        </ListBox>
+                        <WrapPanel Margin="0,14,0,8">
+                            <Border Style="{StaticResource ListItem.NotDispatched}" Margin="0,0,8,8">
+                                <TextBlock Text="Not dispatched" Foreground="White" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.Reserved}" Margin="0,0,8,8">
+                                <TextBlock Text="Reserved" Foreground="White" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.FromApp}" Margin="0,0,8,8">
+                                <TextBlock Text="From app" Foreground="{StaticResource Brush.TextPrimary}" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.Urgent}" Margin="0,0,8,8">
+                                <TextBlock Text="Urgent" Foreground="{StaticResource Brush.TextPrimary}" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.Next}" Margin="0,0,8,8">
+                                <TextBlock Text="Next" Foreground="{StaticResource Brush.TextPrimary}" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.AreaYellow}" Margin="0,0,8,8">
+                                <TextBlock Text="Yellow area" Foreground="{StaticResource Brush.TextPrimary}" />
+                            </Border>
+                            <Border Style="{StaticResource ListItem.AreaWhite}" BorderBrush="{StaticResource Brush.ListBorderHighlight}" BorderThickness="1" Margin="0,0,8,8">
+                                <TextBlock Text="White area / selected border" Foreground="{StaticResource Brush.ListItemPrimaryText}" />
+                            </Border>
+                        </WrapPanel>
+                        <WrapPanel Margin="0,0,0,8">
+                            <TextBlock Text="Wait time unanswered" Foreground="{StaticResource Brush.ListWaitTimeMissing}" Margin="0,0,16,4" />
+                            <TextBlock Text="Being edited" Foreground="{StaticResource Brush.ListEditing}" Margin="0,0,16,4" />
+                            <TextBlock Text="List item text 1" Foreground="{StaticResource Brush.ListItemPrimaryText}" Margin="0,0,16,4" />
+                            <TextBlock Text="List item text 2" Foreground="{StaticResource Brush.ListItemSecondaryText}" Margin="0,0,16,4" />
+                            <TextBlock Text="List item text 3" Foreground="{StaticResource Brush.ListItemEmphasisText}" Background="{StaticResource Brush.ListData}" Margin="0,0,16,4" />
+                        </WrapPanel>
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;ListBox Style=&quot;{StaticResource ListBox.Base}&quot; ItemContainerStyle=&quot;{StaticResource ListBoxItem.Base}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Border Style=&quot;{StaticResource ListItem.Reserved}&quot;&gt;...&lt;/Border&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="06 · DataGrid"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Native WPF DataGrid styles provide header/data colors, alternating rows, selection border and single-row selection."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <DataGrid x:Name="StyleGrid"
+                                  Style="{StaticResource DataGrid.Base}"
+                                  ItemsSource="{Binding DemoRows, ElementName=Root}"
+                                  Height="180"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Order" Binding="{Binding Order}" Width="90" />
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="140" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock Style="{StaticResource Demo.Code}" Margin="0,10,0,0"
+                                   Text="&lt;DataGrid Style=&quot;{StaticResource DataGrid.Base}&quot; ItemsSource=&quot;{Binding Rows}&quot;&gt;...&lt;/DataGrid&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="DataGrid.Base composes DataGrid.Header + DataGrid.Cell + DataGrid.Row." />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="07 · Tooltip, scrollbar, window and dialog"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Hover the button for the tooltip. The showcase's outer ScrollViewer uses the custom template."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <StackPanel Orientation="Horizontal">
+                            <Button Content="Hover to show styled ToolTip"
+                                    Style="{StaticResource Button.Secondary}"
+                                    Margin="0,0,10,0">
+                                <Button.ToolTip>
+                                    <ToolTip Style="{StaticResource ToolTip.Base}"
+                                             Content="ToolTip.Base is reusable across controls." />
+                                </Button.ToolTip>
+                            </Button>
+                            <Button Content="Open Window.Dialog sample"
+                                    Style="{StaticResource Button.Secondary}"
+                                    Click="OpenDialog_Click" />
+                        </StackPanel>
+                        <TextBlock Style="{StaticResource Demo.Code}" Margin="0,10,0,0"
+                                   Text="&lt;Window Style=&quot;{StaticResource Window.Main}&quot; ... /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Window Style=&quot;{StaticResource Window.Dialog}&quot; ... /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;ToolTip Style=&quot;{StaticResource ToolTip.Base}&quot; Content=&quot;Help&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;ScrollViewer Style=&quot;{StaticResource ScrollViewer.Custom}&quot; VerticalScrollBarVisibility=&quot;Auto&quot; /&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="08 · Infragistics styles (source copied, runtime optional)"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Optional Infragistics styles are available in Resources/ThirdParty/Source/OptionalInfragisticsStyles.xaml. They require Infragistics WPF 2020.2 and are not loaded by this .NET 10 demo."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Window Style=&quot;{StaticResource VendorTemplateWindow}&quot; Background=&quot;{StaticResource BgMainMonitor}&quot; ... /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Window Style=&quot;{StaticResource VendorTemplatePopupWindow}&quot; Background=&quot;{StaticResource BgPopupMonitor}&quot; ... /&gt;" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,0,0,8"
+                                   Text="These window style keys set the window background only. They are examples from the optional dictionary and are unavailable at runtime until that dictionary's Infragistics dependencies are installed and the resource is loaded." />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;igDP:XamDataGrid Style=&quot;{StaticResource VendorTemplateGrid}&quot;&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="  &lt;igDP:XamDataGrid.Resources&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="    &lt;Style TargetType=&quot;{x:Type igDP:DataRecordCellArea}&quot; BasedOn=&quot;{StaticResource VendorTemplateGridCellArea}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="    &lt;Style TargetType=&quot;{x:Type igDP:LabelPresenter}&quot; BasedOn=&quot;{StaticResource VendorTemplateGridHeaderArea}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="    &lt;Style TargetType=&quot;{x:Type igDP:CellValuePresenter}&quot; BasedOn=&quot;{StaticResource VendorTemplateGridCellValuePresenter}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="  &lt;/igDP:XamDataGrid.Resources&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;/igDP:XamDataGrid&gt;" />
+                        <TextBlock Style="{StaticResource Demo.Code}" Margin="0,8,0,0"
+                                   Text="XamDataGrid style: VendorTemplateGrid · header: VendorTemplateGridHeaderArea · record: VendorTemplateGridCellArea · cell: VendorTemplateGridCellValuePresenter." />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;igEditors:XamDateTimeEditor Style=&quot;{StaticResource VendorTemplateDateTime}&quot; /&gt;  |  &lt;igEditors:XamDateTimeEditor Style=&quot;{StaticResource VendorTemplateDateTimeHalfWidth}&quot; /&gt;" />
+                        <TextBlock Style="{StaticResource Text.Caption}" Margin="0,8,0,0"
+                                   Text="The source dictionary is copied as Content, not compiled or merged, because Infragistics assemblies are not present. See README for the required licensed dependencies and integration steps." />
+                    </StackPanel>
+                </Border>
+
+                <Border Style="{StaticResource Demo.Card}">
+                    <StackPanel>
+                        <TextBlock Text="09 · Resource usage and style inheritance"
+                                   Style="{StaticResource Text.SectionHeading}" />
+                        <TextBlock Text="Use StaticResource for fixed theme resources. Derive a local variant with BasedOn and override only the differences."
+                                   Style="{StaticResource Text.Body}" Margin="0,6,0,12" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="Style=&quot;{StaticResource Button.Primary}&quot;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="BasedOn=&quot;{StaticResource Button.Secondary}&quot;" />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="Control.Base is inherited by Button.Base, Input.TextBox, Input.ComboBox and other controls." />
+                        <TextBlock Style="{StaticResource Demo.Code}"
+                                   Text="&lt;Style x:Key=&quot;Button.Danger&quot; TargetType=&quot;Button&quot; BasedOn=&quot;{StaticResource Button.Primary}&quot;&gt;...&lt;/Style&gt;" />
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="Infragistics-specific XamDataGrid and XamDateTimeEditor templates are intentionally not imported; this showcase uses stock WPF DataGrid and DatePicker."
+                           Style="{StaticResource Text.Caption}"
+                           Margin="0,0,0,8" />
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
