@@ -2,10 +2,14 @@ using System.Windows.Input;
 
 namespace ProductName.App.Wpf.Base;
 
-public sealed class AsyncCommand(
-    Func<Task> execute,
-    Func<bool> canExecute,
-    Action<Exception> onError) : ICommand
+/// <summary>
+/// Used for asynchronous commands that may take some time to complete, such as network requests or database operations. 
+/// It prevents multiple executions of the command while it is already running and provides error handling.
+/// </summary>
+/// <param name="execute"></param>
+/// <param name="canExecute"></param>
+/// <param name="onError"></param>
+public sealed class AsyncCommand(Func<Task> execute, Func<bool> canExecute, Action<Exception> onError) : ICommand
 {
     private bool _isRunning;
 

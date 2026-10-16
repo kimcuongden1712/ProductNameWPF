@@ -1,17 +1,28 @@
-using System.Diagnostics;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System.Windows;
-using ProductName.App.Wpf.Features.Main;
-using ProductName.AppCore.Authentication;
-using ProductName.Infrastructure;
-
 namespace ProductName.App.Wpf
 {
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using ProductName.App.Wpf.Features.Login;
+    using ProductName.AppCore.Authentication;
+    using ProductName.AppCore.Authentication.Interface;
+    using ProductName.Infrastructure;
+    using System.Diagnostics;
+    using System.Windows;
+
+    /// <summary>
+    /// Defines the <see cref="App" />
+    /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Defines the _host
+        /// </summary>
         private IHost? _host;
 
+        /// <summary>
+        /// The OnStartup
+        /// </summary>
+        /// <param name="e">The e<see cref="StartupEventArgs"/></param>
         protected override async void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -24,16 +35,16 @@ namespace ProductName.App.Wpf
                     {
                         services.AddProductNameInfrastructure(context.Configuration);
                         services.AddSingleton<IAuthenticationWorkflow, AuthenticationWorkflow>();
-                        services.AddSingleton<MainViewModel>();
-                        services.AddSingleton<MainWindow>();
+                        services.AddTransient<LoginViewModel>();
+                        services.AddTransient<LoginView>();
                     })
                     .Build();
 
                 await _host.StartAsync();
 
-                var mainWindow = _host.Services.GetRequiredService<MainWindow>();
-                MainWindow = mainWindow;
-                mainWindow.Show();
+                LoginView loginView = _host.Services.GetRequiredService<LoginView>();
+                MainWindow = loginView;
+                loginView.Show();
             }
             catch (Exception ex)
             {
@@ -50,6 +61,10 @@ namespace ProductName.App.Wpf
             }
         }
 
+        /// <summary>
+        /// The OnExit
+        /// </summary>
+        /// <param name="e">The e<see cref="ExitEventArgs"/></param>
         protected override async void OnExit(ExitEventArgs e)
         {
             try

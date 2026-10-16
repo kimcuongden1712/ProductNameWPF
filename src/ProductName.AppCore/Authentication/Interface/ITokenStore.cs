@@ -1,4 +1,4 @@
-namespace ProductName.AppCore.Authentication;
+namespace ProductName.AppCore.Authentication.Interface;
 
 public interface ITokenStore
 {

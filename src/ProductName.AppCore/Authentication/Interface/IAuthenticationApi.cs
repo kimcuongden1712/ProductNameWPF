@@ -1,4 +1,6 @@
-namespace ProductName.AppCore.Authentication;
+using ProductName.AppCore.Model;
+
+namespace ProductName.AppCore.Authentication.Interface;
 
 public interface IAuthenticationApi
 {

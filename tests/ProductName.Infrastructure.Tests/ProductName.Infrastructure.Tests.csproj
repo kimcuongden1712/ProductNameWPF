@@ -19,10 +19,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\ProductName.Infrastructure\ProductName.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\ProductName.App.Wpf\ProductName.App.Wpf.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Authentication\" />
+    <Folder Include="Http\" />
   </ItemGroup>
 
 </Project>

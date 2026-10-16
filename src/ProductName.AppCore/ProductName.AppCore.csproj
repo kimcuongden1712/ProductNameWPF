@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Example\" />
-    <Folder Include="Features\Main\" />
+    <ProjectReference Include="..\ProductName.Domain\ProductName.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProductName.Domain\ProductName.Domain.csproj" />
+    <Folder Include="Features\" />
   </ItemGroup>
 
 </Project>

@@ -14,12 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ExternalApis\" />
-    <Folder Include="Devices\" />
-    <Folder Include="Persistence\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\ProductName.AppCore\ProductName.AppCore.csproj" />
     <ProjectReference Include="..\ProductName.Domain\ProductName.Domain.csproj" />
   </ItemGroup>

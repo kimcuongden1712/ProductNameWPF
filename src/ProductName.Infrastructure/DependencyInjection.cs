@@ -1,45 +1,42 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProductName.AppCore.Authentication;
+using ProductName.AppCore.Authentication.Interface;
 using ProductName.Infrastructure.Authentication;
+using ProductName.Infrastructure.Http;
 
-namespace ProductName.Infrastructure;
-
-public static class DependencyInjection
+namespace ProductName.Infrastructure
 {
-    public static IServiceCollection AddProductNameInfrastructure(
-        this IServiceCollection services,
-        IConfiguration configuration)
+    public static class DependencyInjection
     {
-        var apiOptions = new ApiOptions
+        public static IServiceCollection AddProductNameInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
-            BaseUrl = configuration["Api:BaseUrl"] ?? "",
-            SignInPath = configuration["Api:SignInPath"] ?? "/signin",
-            CurrentAccountPath = configuration["Api:CurrentAccountPath"] ?? "/me",
-            SignOutPath = configuration["Api:SignOutPath"] ?? ""
-        };
+            var apiOptions = new ApiOptions();
 
-        if (!Uri.TryCreate(apiOptions.BaseUrl, UriKind.Absolute, out var baseAddress) ||
-            (baseAddress.Scheme != Uri.UriSchemeHttps && baseAddress.Host != "localhost"))
-        {
-            throw new InvalidOperationException(
-                "Configure Api:BaseUrl as an HTTPS URL (HTTP is allowed only for localhost).");
+            if (!Uri.TryCreate(apiOptions.BaseUrl, UriKind.Absolute, out var baseAddress) ||
+                (baseAddress.Scheme != Uri.UriSchemeHttps && baseAddress.Host != "localhost"))
+            {
+                throw new InvalidOperationException(
+                    "Configure Api:BaseUrl as an HTTPS URL (HTTP is allowed only for localhost).");
+            }
+
+            services.AddSingleton(apiOptions);
+            services.AddSingleton<ITokenStore, DpapiTokenStore>();
+            services.AddHttpClient<ExecuteHttpClient>(client =>
+            {
+                client.BaseAddress = baseAddress;
+                client.Timeout = TimeSpan.FromSeconds(20);
+            });
+            services.AddTransient<IAuthenticationApi, AuthenticationApi>();
+            services.AddTransient<AuthenticatedSessionHandler>();
+            services.AddHttpClient("AuthenticatedApi", client =>
+            {
+                client.BaseAddress = baseAddress;
+                client.Timeout = TimeSpan.FromSeconds(20);
+            }).AddHttpMessageHandler<AuthenticatedSessionHandler>();
+
+            return services;
         }
-
-        services.AddSingleton(apiOptions);
-        services.AddSingleton<ITokenStore, DpapiTokenStore>();
-        services.AddHttpClient<IAuthenticationApi, AuthenticationApi>(client =>
-        {
-            client.BaseAddress = baseAddress;
-            client.Timeout = TimeSpan.FromSeconds(20);
-        });
-        services.AddTransient<AuthenticatedSessionHandler>();
-        services.AddHttpClient("AuthenticatedApi", client =>
-        {
-            client.BaseAddress = baseAddress;
-            client.Timeout = TimeSpan.FromSeconds(20);
-        }).AddHttpMessageHandler<AuthenticatedSessionHandler>();
-
-        return services;
     }
 }

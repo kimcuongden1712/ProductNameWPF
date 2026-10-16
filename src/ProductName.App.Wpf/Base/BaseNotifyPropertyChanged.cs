@@ -1,15 +1,14 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
 namespace ProductName.App.Wpf.Base
 {
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
     /// <summary>
     /// Base class providing INotifyPropertyChanged implementation
     /// with helper methods for property change notification
     /// </summary>
     public abstract class BaseNotifyPropertyChanged : INotifyPropertyChanged, IDisposable
     {
-        #region INotifyPropertyChanged Implementation
 
         /// <summary>
         /// Occurs when a property value changes
@@ -47,10 +46,6 @@ namespace ProductName.App.Wpf.Base
         {
             PropertyChanged?.Invoke(this, e);
         }
-
-        #endregion
-
-        #region Property Setting Helper Methods
 
         /// <summary>
         /// Sets the property value and raises PropertyChanged if the value has changed
@@ -154,10 +149,6 @@ namespace ProductName.App.Wpf.Base
             return true;
         }
 
-        #endregion
-
-        #region Utility Methods
-
         /// <summary>
         /// Checks if PropertyChanged event has any subscribers
         /// </summary>
@@ -176,10 +167,6 @@ namespace ProductName.App.Wpf.Base
         {
             return new NotificationSuspender(this);
         }
-
-        #endregion
-
-        #region IDisposable Implementation
 
         private bool _disposed = false;
 
@@ -235,10 +222,6 @@ namespace ProductName.App.Wpf.Base
                 throw new ObjectDisposedException(GetType().Name);
         }
 
-        #endregion
-
-        #region Nested Classes
-
         /// <summary>
         /// Helper class to temporarily suspend property change notifications
         /// </summary>
@@ -260,6 +243,5 @@ namespace ProductName.App.Wpf.Base
             }
         }
 
-        #endregion
     }
 }

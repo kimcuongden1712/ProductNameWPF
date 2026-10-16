@@ -1,6 +1,8 @@
+using ProductName.AppCore.Authentication;
+using ProductName.AppCore.Authentication.Interface;
+using ProductName.AppCore.Model;
 using System.Net;
 using System.Net.Http.Headers;
-using ProductName.AppCore.Authentication;
 
 namespace ProductName.Infrastructure.Authentication;
 
@@ -25,7 +27,7 @@ public sealed class AuthenticatedSessionHandler(IAuthenticationWorkflow authenti
         if (response.StatusCode == HttpStatusCode.Unauthorized)
         {
             response.Dispose();
-            await authenticationWorkflow.InvalidateSessionAsync(cancellationToken);
+            //await authenticationWorkflow.InvalidateSessionAsync(cancellationToken);
             throw new AuthenticationException(
                 AuthenticationFailure.InvalidToken,
                 "Your session expired. Please sign in again.");

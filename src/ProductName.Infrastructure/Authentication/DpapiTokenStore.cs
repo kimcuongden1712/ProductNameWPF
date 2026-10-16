@@ -1,6 +1,6 @@
+using ProductName.AppCore.Authentication.Interface;
 using System.Security.Cryptography;
 using System.Text;
-using ProductName.AppCore.Authentication;
 
 namespace ProductName.Infrastructure.Authentication;
 

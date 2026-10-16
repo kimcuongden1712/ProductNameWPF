@@ -5,25 +5,18 @@ namespace ProductName.App.Wpf.Base
     /// </summary>
     public abstract class BaseViewModel : BaseNotifyPropertyChanged
     {
-        #region Fields
-
-        #endregion
-
-        #region Common Properties
-        #endregion
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BaseViewModel"/> class.
+        /// </summary>
         public BaseViewModel()
         {
         }
-
-        #region Lifecycle Methods
 
         /// <summary>
         /// Called when ViewModel is initialized (override in derived classes)
         /// </summary>
         protected virtual void OnInitialize()
         {
-
         }
 
         /// <summary>
@@ -31,18 +24,14 @@ namespace ProductName.App.Wpf.Base
         /// </summary>
         protected virtual void OnLoaded()
         {
-
         }
 
-        #endregion
-
-        #region Overrides
-
+        /// <summary>
+        /// The OnDisposing
+        /// </summary>
         protected override void OnDisposing()
         {
             base.OnDisposing();
         }
-
-        #endregion
     }
 }
