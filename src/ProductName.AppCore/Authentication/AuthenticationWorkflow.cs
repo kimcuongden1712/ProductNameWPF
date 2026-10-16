@@ -62,7 +62,7 @@ public sealed class AuthenticationWorkflow(
 
         try
         {
-            await tokenStore.SaveAsync(accessToken, cancellationToken);
+            await tokenStore.SaveAsync(accessToken, expiresAtUtc, cancellationToken);
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
@@ -86,7 +86,10 @@ public sealed class AuthenticationWorkflow(
         CurrentSession = null;
         _pendingProfileToken = null;
 
-        var accessToken = await tokenStore.ReadAsync(cancellationToken);
+        var stored = await tokenStore.ReadAsync(cancellationToken);
+        var accessToken = stored?.AccessToken;
+        var expiresAtUtc = stored?.ExpiresAtUtc;
+
         if (string.IsNullOrWhiteSpace(accessToken))
         {
             return RestoreSessionStatus.NoToken;
@@ -95,7 +98,7 @@ public sealed class AuthenticationWorkflow(
         try
         {
             var account = await authenticationApi.GetCurrentAccountAsync(accessToken, cancellationToken);
-            CurrentSession = new AuthenticationSession(accessToken, account);
+            CurrentSession = new AuthenticationSession(accessToken, account, expiresAtUtc);
             return RestoreSessionStatus.Restored;
         }
         catch (AuthenticationException ex) when (ex.Failure == AuthenticationFailure.InvalidToken)
@@ -110,16 +113,16 @@ public sealed class AuthenticationWorkflow(
         }
     }
 
-    public async Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken)
-    {
-        var accessToken = _pendingProfileToken;
-        if (string.IsNullOrWhiteSpace(accessToken))
-        {
-            throw new InvalidOperationException("There is no pending profile request to retry.");
-        }
+    //public async Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken)
+    //{
+    //    var accessToken = _pendingProfileToken;
+    //    if (string.IsNullOrWhiteSpace(accessToken))
+    //    {
+    //        throw new InvalidOperationException("There is no pending profile request to retry.");
+    //    }
 
-        return await LoadAndCommitProfileAsync(accessToken, null, cancellationToken);
-    }
+    //    return await LoadAndCommitProfileAsync(accessToken, null, cancellationToken);
+    //}
 
     public async Task SignOutAsync(CancellationToken cancellationToken)
     {
@@ -131,8 +134,14 @@ public sealed class AuthenticationWorkflow(
 
         if (!string.IsNullOrWhiteSpace(accessToken))
         {
-            try { await authenticationApi.SignOutAsync(accessToken, cancellationToken); }
-            catch { /* Local sign-out succeeds even when the service is unavailable. */ }
+            try
+            {
+                await authenticationApi.SignOutAsync(accessToken, cancellationToken);
+            }
+            catch
+            {
+                /* Local sign-out succeeds even when the service is unavailable. */
+            }
         }
     }
 

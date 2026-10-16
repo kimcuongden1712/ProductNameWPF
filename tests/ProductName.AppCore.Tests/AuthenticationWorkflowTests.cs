@@ -9,7 +9,7 @@ public sealed class AuthenticationWorkflowTests
     [Test]
     public async Task Restore_WhenServiceUnavailable_KeepsTokenAndDoesNotCreateSession()
     {
-        var store = new FakeTokenStore("saved-token");
+        var store = new FakeTokenStore(("saved-token", (DateTimeOffset?)null));
         var api = new FakeAuthenticationApi { ProfileError = new AuthenticationException(AuthenticationFailure.NetworkUnavailable, "offline") };
         var workflow = new AuthenticationWorkflow(api, store);
 
@@ -24,7 +24,7 @@ public sealed class AuthenticationWorkflowTests
     [Test]
     public async Task Restore_WhenTokenInvalid_ClearsToken()
     {
-        var store = new FakeTokenStore("expired");
+        var store = new FakeTokenStore(("expired", (DateTimeOffset?)null));
         var api = new FakeAuthenticationApi { ProfileError = new AuthenticationException(AuthenticationFailure.InvalidToken, "expired") };
         var workflow = new AuthenticationWorkflow(api, store);
 
@@ -48,13 +48,13 @@ public sealed class AuthenticationWorkflowTests
         Assert.That(workflow.HasPendingProfileLoad, Is.True);
     }
 
-    private sealed class FakeTokenStore(string? token = null) : ITokenStore
+    private sealed class FakeTokenStore((string? AccessToken, DateTimeOffset? ExpiresAtUtc)? token = null) : ITokenStore
     {
-        public string? Token { get; private set; } = token;
+        public string? Token { get; private set; } = token?.AccessToken;
 
-        public Task<string?> ReadAsync(CancellationToken cancellationToken) => Task.FromResult(Token);
+        public Task<(string? AccessToken, DateTimeOffset? ExpiresAtUtc)?> ReadAsync(CancellationToken cancellationToken) => Task.FromResult(token);
 
-        public Task SaveAsync(string accessToken, CancellationToken cancellationToken)
+        public Task SaveAsync(string accessToken, DateTimeOffset? expiresAtUtc, CancellationToken cancellationToken)
         { Token = accessToken; return Task.CompletedTask; }
 
         public Task ClearAsync(CancellationToken cancellationToken)

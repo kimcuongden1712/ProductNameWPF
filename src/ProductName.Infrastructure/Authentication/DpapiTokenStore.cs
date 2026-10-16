@@ -1,6 +1,7 @@
 using ProductName.AppCore.Authentication.Interface;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace ProductName.Infrastructure.Authentication;
 
@@ -13,7 +14,9 @@ public sealed class DpapiTokenStore : ITokenStore
         "ProductNameWPF",
         "session.bin");
 
-    public async Task<string?> ReadAsync(CancellationToken cancellationToken)
+    private sealed record TokenStore(string AccessToken, DateTimeOffset? ExpiresAtUtc);
+
+    public async Task<(string? AccessToken, DateTimeOffset? ExpiresAtUtc)?> ReadAsync(CancellationToken cancellationToken)
     {
         await _gate.WaitAsync(cancellationToken);
         try
@@ -30,9 +33,23 @@ public sealed class DpapiTokenStore : ITokenStore
                     protectedBytes,
                     Entropy,
                     DataProtectionScope.CurrentUser);
-                return Encoding.UTF8.GetString(tokenBytes);
+
+                var json = Encoding.UTF8.GetString(tokenBytes);
+                var token = JsonSerializer.Deserialize<TokenStore>(json);
+                if (token is null)
+                {
+                    File.Delete(_tokenPath);
+                    return null;
+                }
+
+                return (token.AccessToken, token.ExpiresAtUtc);
             }
             catch (CryptographicException)
+            {
+                File.Delete(_tokenPath);
+                return null;
+            }
+            catch (JsonException)
             {
                 File.Delete(_tokenPath);
                 return null;
@@ -44,7 +61,7 @@ public sealed class DpapiTokenStore : ITokenStore
         }
     }
 
-    public async Task SaveAsync(string accessToken, CancellationToken cancellationToken)
+    public async Task SaveAsync(string accessToken, DateTimeOffset? expiresAtUtc, CancellationToken cancellationToken)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(accessToken);
 
@@ -54,7 +71,9 @@ public sealed class DpapiTokenStore : ITokenStore
             var directory = Path.GetDirectoryName(_tokenPath)!;
             Directory.CreateDirectory(directory);
 
-            var tokenBytes = Encoding.UTF8.GetBytes(accessToken);
+            var token = new TokenStore(accessToken, expiresAtUtc);
+            var json = JsonSerializer.Serialize(token);
+            var tokenBytes = Encoding.UTF8.GetBytes(json);
             var protectedBytes = ProtectedData.Protect(
                 tokenBytes,
                 Entropy,

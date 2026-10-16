@@ -9,11 +9,11 @@ namespace ProductName.App.Wpf.Features.Login;
 public sealed class LoginViewModel : BaseViewModel
 {
     public event EventHandler? SignInCompleted;
-    public event EventHandler? RetryProfileRequested;
+    //public event EventHandler? RetryProfileRequested;
     #region fields
 
     private readonly AsyncCommand _signInCommand;
-    private readonly RelayCommand _retryProfileCommand;
+    //private readonly RelayCommand _retryProfileCommand;
     private readonly IAuthenticationWorkflow _authenticationWorkflow;
     private string _customerCode = string.Empty;
     private string _password = string.Empty;
@@ -48,14 +48,14 @@ public sealed class LoginViewModel : BaseViewModel
 
     #region commands
     public ICommand SignInCommand => _signInCommand;
-    public ICommand RetryProfileCommand => _retryProfileCommand;
+    //public ICommand RetryProfileCommand => _retryProfileCommand;
     #endregion
 
     public LoginViewModel(IAuthenticationWorkflow authenticationWorkflow)
     {
         _authenticationWorkflow = authenticationWorkflow;
         _signInCommand = new AsyncCommand(SignInAsync, CanSignIn, HandleSignInError);
-        _retryProfileCommand = new RelayCommand(_ => RetryProfileRequested?.Invoke(this, EventArgs.Empty));
+        //_retryProfileCommand = new RelayCommand(_ => RetryProfileRequested?.Invoke(this, EventArgs.Empty));
     }
     #region private methods
     private async Task SignInAsync()
@@ -90,7 +90,7 @@ public sealed class LoginViewModel : BaseViewModel
     }
 
     public void ShowMessage(string message) => Message = message;
-    public void RetryProfileLoad() => RetryProfileRequested?.Invoke(this, EventArgs.Empty);
+    //public void RetryProfileLoad() => RetryProfileRequested?.Invoke(this, EventArgs.Empty);
     private bool CanSignIn() => !string.IsNullOrWhiteSpace(CustomerCode) && !string.IsNullOrWhiteSpace(Password);
 
     private void HandleSignInError(Exception exception)

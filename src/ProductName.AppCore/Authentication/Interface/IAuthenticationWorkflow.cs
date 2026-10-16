@@ -17,7 +17,7 @@ public interface IAuthenticationWorkflow
 
     Task<RestoreSessionStatus> TryRestoreSessionAsync(CancellationToken cancellationToken);
 
-    Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken);
+    //Task<AuthenticationSession> RetryProfileLoadAsync(CancellationToken cancellationToken);
 
     Task SignOutAsync(CancellationToken cancellationToken);
 
