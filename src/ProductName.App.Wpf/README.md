@@ -20,8 +20,8 @@ Với App.Wpf, hạn chế tham chiếu trực tiếp Domain: để Application 
 
 `MainWindow` is the shell and displays the current feature through a `DataTemplate`:
 
-`LoginView` → `MenuView` (`A_1_View`) → `DispatchView` (`B_View`).
+`LoginView` → `MenuView` → `DispatchView`.
 
-Each screen has its own ViewModel. `DispatchView` keeps its header, side bar, and main workspace in separate regions. The header contains `B_1View` and `B_2View`; the side region switches between `C_3View` and the dispatch menu; the main region switches between `D_1View`, `D_2View`, `E_1View`, and `F_1View`. Its initial content is `C_3View` and `D_1View`.
+Each screen has its own ViewModel. `DispatchView` keeps its header, side bar, and main workspace in separate regions. The header contains `HeaderView1` and `HeaderView2`; the side region switches between `SideView` and the dispatch menu; the main region switches between `1View`, `2View`, `3View`, and `4View`. Its initial content is `SideView` and `ContentView`.
 
 `MainView` is retained as a reference screen and is not part of the normal sign-in navigation flow.
