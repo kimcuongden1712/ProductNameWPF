@@ -34,8 +34,14 @@ public sealed class DpapiTokenStore : ITokenStore
                     Entropy,
                     DataProtectionScope.CurrentUser);
 
-                var json = Encoding.UTF8.GetString(tokenBytes);
-                var token = JsonSerializer.Deserialize<TokenStore>(json);
+                var payload = Encoding.UTF8.GetString(tokenBytes);
+                // Read tokens written by older builds, which protected the token string directly.
+                if (!payload.TrimStart().StartsWith('{'))
+                {
+                    return string.IsNullOrWhiteSpace(payload) ? null : (payload, null);
+                }
+
+                var token = JsonSerializer.Deserialize<TokenStore>(payload);
                 if (token is null)
                 {
                     File.Delete(_tokenPath);

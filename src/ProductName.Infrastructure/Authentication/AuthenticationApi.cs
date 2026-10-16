@@ -22,7 +22,7 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
             Content = JsonContent.Create(new SignInRequest(customerCode, password), options: JsonOptions)
         };
 
-        ApiResultModel response = await httpClient.PostDataListAsync(request, null, cancellationToken);
+        ApiResultModel response = await httpClient.GetAnonymousAsync(request, HttpMethod.Post, cancellationToken);
         if (response.IsError)
         {
             var failure = response.Error?.Kind switch
@@ -75,7 +75,7 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
         {
             RequestUri = new Uri(options.BaseUrl + options.CurrentAccountPath),
         };
-        ApiResultModel response = await httpClient.GetDataListAsync(request, accessToken, cancellationToken);
+        ApiResultModel response = await httpClient.SendWithTokenAsync(request, HttpMethod.Get, accessToken, cancellationToken);
         if (response.IsError)
         {
             var failure = response.StatusCode == HttpStatusCode.Unauthorized
@@ -101,12 +101,8 @@ public sealed class AuthenticationApi(ExecuteHttpClient httpClient, ApiOptions o
 
     public async Task SignOutAsync(string accessToken, CancellationToken cancellationToken)
     {
-
-        using var request = new HttpRequestMessage
-        {
-            RequestUri = new Uri(options.BaseUrl + options.SignOutPath),
-        };
-        ApiResultModel response = await httpClient.PostDataListAsync(request, accessToken, cancellationToken);
+        // SampleWPFAPI has no logout/revocation endpoint; local token removal ends this device's session.
+        await Task.CompletedTask;
     }
 
     #region request/response models /api/v1/auth/signin

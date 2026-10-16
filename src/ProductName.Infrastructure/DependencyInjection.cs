@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProductName.AppCore.Authentication;
 using ProductName.AppCore.Authentication.Interface;
 using ProductName.Infrastructure.Authentication;
 using ProductName.Infrastructure.Http;
@@ -23,19 +24,13 @@ namespace ProductName.Infrastructure
 
             services.AddSingleton(apiOptions);
             services.AddSingleton<ITokenStore, DpapiTokenStore>();
+            services.AddSingleton<IAuthenticationSessionState, AuthenticationSessionState>();
             services.AddHttpClient<ExecuteHttpClient>(client =>
             {
                 client.BaseAddress = baseAddress;
                 client.Timeout = TimeSpan.FromSeconds(20);
             });
             services.AddTransient<IAuthenticationApi, AuthenticationApi>();
-            services.AddTransient<AuthenticatedSessionHandler>();
-            services.AddHttpClient("AuthenticatedApi", client =>
-            {
-                client.BaseAddress = baseAddress;
-                client.Timeout = TimeSpan.FromSeconds(20);
-            }).AddHttpMessageHandler<AuthenticatedSessionHandler>();
-
             return services;
         }
     }

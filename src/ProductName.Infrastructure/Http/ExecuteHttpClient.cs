@@ -1,3 +1,6 @@
+using ProductName.AppCore.Authentication;
+using ProductName.AppCore.Authentication.Interface;
+using ProductName.AppCore.Model;
 using ProductName.Domain;
 using System.Net;
 using System.Net.Http.Headers;
@@ -5,33 +8,76 @@ using System.Text.Json;
 
 namespace ProductName.Infrastructure.Http;
 
-public sealed class ExecuteHttpClient(HttpClient httpClient)
+public sealed class ExecuteHttpClient(
+    HttpClient httpClient,
+    IAuthenticationSessionState sessionState,
+    ITokenStore tokenStore)
 {
-    #region request don't have access token
-    public Task<ApiResultModel> GetDataListAsync(HttpRequestMessage request, string? accessToken = null, CancellationToken cancellationToken = default)
+    public Task<ApiResultModel> GetAnonymousAsync(HttpRequestMessage request, HttpMethod method, CancellationToken cancellationToken = default)
     {
-        request.Method = HttpMethod.Get;
-        return SendAsync(request, accessToken, cancellationToken);
+        request.Method = method;
+        return SendAsync(request, null, invalidateOnUnauthorized: false, cancellationToken);
     }
-    public Task<ApiResultModel> PostDataListAsync(HttpRequestMessage request, string? accessToken = null, CancellationToken cancellationToken = default)
-    {
-        request.Method = HttpMethod.Post;
-        return SendAsync(request, accessToken, cancellationToken);
-    }
-    public Task<ApiResultModel> PutDataListAsync(HttpRequestMessage request, string? accessToken = null, CancellationToken cancellationToken = default)
-    {
-        request.Method = HttpMethod.Put;
-        return SendAsync(request, accessToken, cancellationToken);
-    }
-    public Task<ApiResultModel> DeleteDataAsync(HttpRequestMessage request, string? accessToken = null, CancellationToken cancellationToken = default)
-    {
-        request.Method = HttpMethod.Delete;
-        return SendAsync(request, string.Empty, cancellationToken);
-    }
-    #endregion
 
+    /// <summary>
+    /// Used by session workflows to validate a stored or newly issued token with /me or call API without check ExpiresAtUtc
+    /// </summary>
+    /// <param name="request">The HTTP request message to send. Must not be null.</param>
+    /// <param name="method">The HTTP method to use for the request, such as GET or POST.</param>
+    /// <param name="accessToken">The access token to include in the request for authentication. Cannot be null or whitespace.</param>
+    /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains an ApiResultModel with the response
+    /// data.</returns>
+    public Task<ApiResultModel> SendWithTokenAsync(HttpRequestMessage request, HttpMethod method, string accessToken, CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(accessToken);
+        request.Method = method;
+        return SendAsync(request, accessToken, invalidateOnUnauthorized: false, cancellationToken);
+    }
 
-    private async Task<ApiResultModel> SendAsync(HttpRequestMessage request, string? accessToken = null, CancellationToken cancellationToken = default)
+    public Task<ApiResultModel> GetAuthenticatedAsync(HttpRequestMessage request, CancellationToken cancellationToken = default) =>
+        SendAuthenticatedAsync(request, HttpMethod.Get, cancellationToken);
+
+    public Task<ApiResultModel> PostAuthenticatedAsync(HttpRequestMessage request, CancellationToken cancellationToken = default) =>
+        SendAuthenticatedAsync(request, HttpMethod.Post, cancellationToken);
+
+    public Task<ApiResultModel> PutAuthenticatedAsync(HttpRequestMessage request, CancellationToken cancellationToken = default) =>
+        SendAuthenticatedAsync(request, HttpMethod.Put, cancellationToken);
+
+    public Task<ApiResultModel> DeleteAuthenticatedAsync(HttpRequestMessage request, CancellationToken cancellationToken = default) =>
+        SendAuthenticatedAsync(request, HttpMethod.Delete, cancellationToken);
+
+    private async Task<ApiResultModel> SendAuthenticatedAsync(HttpRequestMessage request, HttpMethod method, CancellationToken cancellationToken)
+    {
+        request.Method = method;
+        var session = sessionState.CurrentSession;
+        if (session is null)
+        {
+            throw new AuthenticationException(AuthenticationFailure.InvalidToken, "Sign in is required before calling this endpoint.");
+        }
+
+        if (session.ExpiresAtUtc is { } expiresAtUtc && expiresAtUtc <= DateTimeOffset.UtcNow)
+        {
+            await InvalidateSessionAsync(cancellationToken);
+            throw new AuthenticationException(AuthenticationFailure.InvalidToken, "Your session expired. Please sign in again.");
+        }
+
+        return await SendAsync(request, session.AccessToken, invalidateOnUnauthorized: true, cancellationToken);
+    }
+
+    private async Task InvalidateSessionAsync(CancellationToken cancellationToken)
+    {
+        try
+        {
+            await tokenStore.ClearAsync(cancellationToken);
+        }
+        finally
+        {
+            sessionState.Clear(invalidated: true);
+        }
+    }
+
+    private async Task<ApiResultModel> SendAsync(HttpRequestMessage request, string? accessToken, bool invalidateOnUnauthorized, CancellationToken cancellationToken)
     {
         if (!string.IsNullOrWhiteSpace(accessToken))
         {
@@ -43,6 +89,10 @@ public sealed class ExecuteHttpClient(HttpClient httpClient)
             using var response = await httpClient.SendAsync(request, cancellationToken);
             var body = response.Content is null ? null : await response.Content.ReadAsStringAsync(cancellationToken);
             var result = new ApiResultModel { StatusCode = response.StatusCode, IsSuccessStatusCode = response.IsSuccessStatusCode, ResponseBody = body };
+            if (response.StatusCode == HttpStatusCode.Unauthorized && invalidateOnUnauthorized)
+            {
+                await InvalidateSessionAsync(cancellationToken);
+            }
             var normalized = TryNormalizeError(body, (int)response.StatusCode);
             if (!response.IsSuccessStatusCode)
             {

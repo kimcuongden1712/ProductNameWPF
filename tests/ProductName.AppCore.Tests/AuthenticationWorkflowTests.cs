@@ -11,7 +11,7 @@ public sealed class AuthenticationWorkflowTests
     {
         var store = new FakeTokenStore(("saved-token", (DateTimeOffset?)null));
         var api = new FakeAuthenticationApi { ProfileError = new AuthenticationException(AuthenticationFailure.NetworkUnavailable, "offline") };
-        var workflow = new AuthenticationWorkflow(api, store);
+        var workflow = new AuthenticationWorkflow(api, store, new AuthenticationSessionState());
 
         var result = await workflow.TryRestoreSessionAsync(CancellationToken.None);
 
@@ -26,7 +26,7 @@ public sealed class AuthenticationWorkflowTests
     {
         var store = new FakeTokenStore(("expired", (DateTimeOffset?)null));
         var api = new FakeAuthenticationApi { ProfileError = new AuthenticationException(AuthenticationFailure.InvalidToken, "expired") };
-        var workflow = new AuthenticationWorkflow(api, store);
+        var workflow = new AuthenticationWorkflow(api, store, new AuthenticationSessionState());
 
         var result = await workflow.TryRestoreSessionAsync(CancellationToken.None);
 
@@ -39,7 +39,7 @@ public sealed class AuthenticationWorkflowTests
     {
         var store = new FakeTokenStore();
         var api = new FakeAuthenticationApi { ProfileError = new AuthenticationException(AuthenticationFailure.ServiceUnavailable, "busy") };
-        var workflow = new AuthenticationWorkflow(api, store);
+        var workflow = new AuthenticationWorkflow(api, store, new AuthenticationSessionState());
 
         Assert.ThrowsAsync<AuthenticationException>(() => workflow.SignInAsync(" C1 ", "secret", CancellationToken.None));
 

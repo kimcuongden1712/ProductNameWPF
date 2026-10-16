@@ -5,7 +5,8 @@ namespace ProductName.AppCore.Authentication;
 
 public sealed class AuthenticationWorkflow(
     IAuthenticationApi authenticationApi,
-    ITokenStore tokenStore) : IAuthenticationWorkflow
+    ITokenStore tokenStore,
+    IAuthenticationSessionState sessionState) : IAuthenticationWorkflow
 {
     #region fields
 
@@ -15,9 +16,13 @@ public sealed class AuthenticationWorkflow(
 
     #region properties events
 
-    public AuthenticationSession? CurrentSession { get; private set; }
+    public AuthenticationSession? CurrentSession => sessionState.CurrentSession;
 
-    public event EventHandler? SessionInvalidated;
+    public event EventHandler? SessionInvalidated
+    {
+        add => sessionState.SessionInvalidated += value;
+        remove => sessionState.SessionInvalidated -= value;
+    }
 
     public bool HasPendingProfileLoad => !string.IsNullOrWhiteSpace(_pendingProfileToken);
 
@@ -27,7 +32,7 @@ public sealed class AuthenticationWorkflow(
 
     public async Task<AuthenticationSession> SignInAsync(string customerCode, string password, CancellationToken cancellationToken)
     {
-        CurrentSession = null;
+        sessionState.Clear();
         _pendingProfileToken = null;
 
         var result = await authenticationApi.SignInAsync(customerCode.Trim(), password, cancellationToken);
@@ -74,7 +79,7 @@ public sealed class AuthenticationWorkflow(
         }
 
         var session = new AuthenticationSession(accessToken, account, expiresAtUtc);
-        CurrentSession = session;
+        sessionState.Set(session);
         _pendingProfileToken = null;
         return session;
     }
@@ -83,7 +88,7 @@ public sealed class AuthenticationWorkflow(
 
     public async Task<RestoreSessionStatus> TryRestoreSessionAsync(CancellationToken cancellationToken)
     {
-        CurrentSession = null;
+        sessionState.Clear();
         _pendingProfileToken = null;
 
         var stored = await tokenStore.ReadAsync(cancellationToken);
@@ -98,7 +103,7 @@ public sealed class AuthenticationWorkflow(
         try
         {
             var account = await authenticationApi.GetCurrentAccountAsync(accessToken, cancellationToken);
-            CurrentSession = new AuthenticationSession(accessToken, account, expiresAtUtc);
+            sessionState.Set(new AuthenticationSession(accessToken, account, expiresAtUtc));
             return RestoreSessionStatus.Restored;
         }
         catch (AuthenticationException ex) when (ex.Failure == AuthenticationFailure.InvalidToken)
@@ -127,7 +132,7 @@ public sealed class AuthenticationWorkflow(
     public async Task SignOutAsync(CancellationToken cancellationToken)
     {
         var accessToken = CurrentSession?.AccessToken ?? _pendingProfileToken;
-        CurrentSession = null;
+        sessionState.Clear();
         _pendingProfileToken = null;
 
         await tokenStore.ClearAsync(cancellationToken);
@@ -147,7 +152,6 @@ public sealed class AuthenticationWorkflow(
 
     public async Task InvalidateSessionAsync(CancellationToken cancellationToken)
     {
-        CurrentSession = null;
         _pendingProfileToken = null;
         try
         {
@@ -155,7 +159,7 @@ public sealed class AuthenticationWorkflow(
         }
         finally
         {
-            SessionInvalidated?.Invoke(this, EventArgs.Empty);
+            sessionState.Clear(invalidated: true);
         }
     }
 }
