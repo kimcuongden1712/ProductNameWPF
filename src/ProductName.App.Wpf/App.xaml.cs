@@ -4,6 +4,9 @@ namespace ProductName.App.Wpf
     using Microsoft.Extensions.Hosting;
     using ProductName.App.Wpf.Features;
     using ProductName.App.Wpf.Features.Login;
+    using ProductName.App.Wpf.Features.Main;
+    using ProductName.App.Wpf.Features.Main.Navigation;
+    using ProductName.App.Wpf.Features.Main.Navigation.Interface;
     using ProductName.AppCore.Authentication;
     using ProductName.AppCore.Authentication.Interface;
     using ProductName.AppCore.Model;
@@ -41,6 +44,8 @@ namespace ProductName.App.Wpf
                         services.AddTransient<LoginView>();
                         services.AddTransient<MenuSettingViewModel>();
                         services.AddTransient<MenuSettingView>();
+                        services.AddSingleton<IUnsavedChangesPrompt, WindowUnsavedChangesPrompt>();
+                        // Keep dialog styling and navigation logic behind the prompt interface.
                         services.AddTransient<MainViewModel>();
                         services.AddTransient<MainView>();
                     })

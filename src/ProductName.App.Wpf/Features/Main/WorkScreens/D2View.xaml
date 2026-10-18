@@ -1,0 +1,12 @@
+<UserControl x:Class="ProductName.App.Wpf.Features.Main.D2View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- D2 is a separate screen with its own ViewModel and retained state. -->
+    <StackPanel>
+        <TextBlock Text="{Binding ScreenTitle}" FontSize="24" FontWeight="Bold" />
+        <TextBlock Text="D2 is a separate screen and retains its own state." Margin="0,8,0,16" />
+        <TextBlock Text="Work notes" FontWeight="SemiBold" />
+        <TextBox Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged}" MinHeight="90" AcceptsReturn="True" TextWrapping="Wrap" Margin="0,6,0,12" />
+        <TextBlock Text="{Binding Status}" Foreground="SlateGray" />
+    </StackPanel>
+</UserControl>

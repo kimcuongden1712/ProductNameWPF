@@ -1,36 +1,63 @@
-<Window x:Class="ProductName.App.Wpf.Features.MainView" 
+<Window x:Class="ProductName.App.Wpf.Features.Main.MainView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Main" Height="720" Width="1120" MinHeight="540" MinWidth="800" WindowStartupLocation="CenterScreen" Background="#F3F5F8">
+        xmlns:main="clr-namespace:ProductName.App.Wpf.Features.Main"
+        xmlns:screens="clr-namespace:ProductName.App.Wpf.Features.Main.WorkScreens"
+        xmlns:behaviors="clr-namespace:ProductName.App.Wpf.Behaviors"
+        Title="Dispatcher" Height="720" Width="1120" MinHeight="540" MinWidth="800"
+        WindowStartupLocation="CenterScreen" Background="#F3F5F8">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type screens:D1ViewModel}">
+            <main:D1View />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type screens:D2ViewModel}">
+            <main:D2View />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="F1" Command="{Binding F1Command}" />
+        <KeyBinding Key="F2" Command="{Binding F2Command}" />
+        <KeyBinding Key="F3" Command="{Binding F3Command}" />
+        <KeyBinding Key="F4" Command="{Binding F4Command}" />
+        <KeyBinding Key="F5" Command="{Binding F5Command}" />
+        <KeyBinding Key="F6" Command="{Binding F6Command}" />
+        <KeyBinding Key="F7" Command="{Binding F7Command}" />
+        <KeyBinding Key="F8" Command="{Binding F8Command}" />
+        <KeyBinding Key="F9" Command="{Binding F9Command}" />
+        <KeyBinding Key="F10" Command="{Binding F10Command}" />
+        <KeyBinding Key="F11" Command="{Binding F11Command}" />
+        <KeyBinding Key="F12" Command="{Binding F12Command}" />
+    </Window.InputBindings>
+
     <Grid Margin="12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="{Binding Header}" FontSize="20" FontWeight="Bold" Margin="4,4,4,12" />
+
+        <!-- The side menu stays in place while only the main content changes. -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="10" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Border Grid.Column="0" Background="White" Padding="12" Margin="0,0,10,0">
-                <StackPanel>
-                    <TextBlock Text="SideView" FontWeight="Bold" />
-                    <Button Content="MainView" Margin="0,10,0,0" />
-                </StackPanel>
+            <Border Grid.Column="0" Background="White" Padding="12" FocusManager.IsFocusScope="True">
+                <main:SideView />
             </Border>
-            <Border Grid.Column="1" Background="White" Padding="18">
-                <TextBlock Text="ContentView" FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <!-- Function keys always follow the screen shown in this content region. -->
+            <Border Grid.Column="2" Background="White" Padding="18" FocusManager.IsFocusScope="True">
+                <ContentControl Content="{Binding CurrentScreen}"
+                                behaviors:FocusFirstElementOnContentChange.IsEnabled="True" />
             </Border>
         </Grid>
-        <UniformGrid Grid.Row="2" Columns="6" Margin="0,10,0,0">
-            <Button Content="F1" />
-            <Button Content="F2" IsEnabled="False" />
-            <Button Content="F3" IsEnabled="False" />
-            <Button Content="F4" IsEnabled="False" />
-            <Button Content="F5" IsEnabled="False" />
-            <Button Content="F12" />
-        </UniformGrid>
+
+        <TextBlock Grid.Row="2" Text="{Binding NavigationMessage}" Foreground="Firebrick" Margin="4,8,4,0" />
+        <!-- Keep the function-key bar fixed at the bottom of the window. -->
+        <main:FunctionKeyBar Grid.Row="3" DataContext="{Binding}" Margin="0,10,0,0" />
     </Grid>
 </Window>

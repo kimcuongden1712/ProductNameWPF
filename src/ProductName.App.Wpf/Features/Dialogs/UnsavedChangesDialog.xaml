@@ -1,0 +1,51 @@
+<Window x:Class="ProductName.App.Wpf.Features.Dialogs.UnsavedChangesDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Unsaved changes" Width="460" Height="250"
+        ResizeMode="NoResize" WindowStyle="None" AllowsTransparency="True"
+        Background="Transparent" ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+    <!-- Escape always cancels the navigation request. -->
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+    </Window.InputBindings>
+
+    <Border Background="White" CornerRadius="12" Padding="24" Margin="12">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="20" ShadowDepth="3" Opacity="0.22" />
+        </Border.Effect>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <DockPanel>
+                <TextBlock Text="Unsaved changes" FontSize="20" FontWeight="SemiBold"
+                           Foreground="#1F2937" VerticalAlignment="Center" />
+                <Button Content="×" Command="{Binding CancelCommand}" DockPanel.Dock="Right"
+                        Width="30" Height="30" FontSize="18" Background="Transparent"
+                        BorderThickness="0" Foreground="#64748B" />
+            </DockPanel>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,18,0,22">
+                <Border Width="40" Height="40" CornerRadius="20" Background="#FFF4D6" Margin="0,0,12,0">
+                    <TextBlock Text="!" FontSize="22" FontWeight="Bold" Foreground="#B7791F"
+                               HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+                <TextBlock Text="This screen has changes that have not been saved."
+                           TextWrapping="Wrap" Foreground="#475569" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <!-- Save, discard, and cancel are the only ways to resolve this prompt. -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancel" Command="{Binding CancelCommand}" MinWidth="90" Padding="12,8"
+                        Margin="0,0,8,0" />
+                <Button Content="Discard" Command="{Binding DiscardCommand}" MinWidth="90" Padding="12,8"
+                        Margin="0,0,8,0" />
+                <Button Content="Save" Command="{Binding SaveCommand}" MinWidth="90" Padding="12,8"
+                        Background="#2563EB" Foreground="White" BorderBrush="#2563EB" IsDefault="True" />
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>

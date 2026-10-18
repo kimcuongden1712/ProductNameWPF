@@ -1,0 +1,10 @@
+<UserControl x:Class="ProductName.App.Wpf.Features.Main.SideView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- These commands change only the main content region. -->
+    <StackPanel>
+        <TextBlock Text="Screens" FontWeight="Bold" FontSize="16" />
+        <Button Content="D1 — Dispatch" Command="{Binding NavigateToD1Command}" Margin="0,12,0,0" Padding="8" />
+        <Button Content="D2 — Keep vehicles" Command="{Binding NavigateToD2Command}" Margin="0,8,0,0" Padding="8" />
+    </StackPanel>
+</UserControl>

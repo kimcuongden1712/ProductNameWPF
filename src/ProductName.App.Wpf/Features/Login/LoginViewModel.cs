@@ -8,10 +8,9 @@ namespace ProductName.App.Wpf.Features.Login;
 
 public sealed class LoginViewModel : BaseViewModel
 {
+    #region fields
     public event EventHandler? SignInCompleted;
     //public event EventHandler? RetryProfileRequested;
-    #region fields
-
     private readonly AsyncCommand _signInCommand;
     //private readonly RelayCommand _retryProfileCommand;
     private readonly IAuthenticationWorkflow _authenticationWorkflow;
@@ -46,7 +45,7 @@ public sealed class LoginViewModel : BaseViewModel
     }
     #endregion
 
-    #region commands
+    #region commands & events
     public ICommand SignInCommand => _signInCommand;
     //public ICommand RetryProfileCommand => _retryProfileCommand;
     #endregion

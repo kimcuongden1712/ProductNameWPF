@@ -1,0 +1,22 @@
+<UserControl x:Class="ProductName.App.Wpf.Features.Main.FunctionKeyBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- The ViewModel always provides twelve slots; unsupported keys stay disabled. -->
+    <ItemsControl ItemsSource="{Binding FunctionKeySlots}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid Columns="12" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Button Command="{Binding Command}" Margin="2" Padding="4,8">
+                    <StackPanel>
+                        <TextBlock Text="{Binding KeyLabel}" FontWeight="Bold" HorizontalAlignment="Center" />
+                        <TextBlock Text="{Binding Label}" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    </StackPanel>
+                </Button>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+    </ItemsControl>
+</UserControl>
